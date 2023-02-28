@@ -9,6 +9,29 @@ Parameters:
         Description: The 2 vCPU machine type 
         Type: String
 Resources:
+
+    S3forEC2: 
+      Type: "AWS::IAM::Role"
+      Properties:
+        AssumeRolePolicyDocument:
+          Version: "2012-10-17"
+          Statement:
+            - Effect: Allow
+              Principal:
+                Service:
+                  - ec2.amazonaws.com
+              Action:
+                - 'sts:AssumeRole'
+        Path: / 
+        ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AmazonS3ReadOnlyAccess
+        
+    S3forEC2InstanceProfile:
+      Type: "AWS::IAM::InstanceProfile"
+      Properties:
+        Path: /  
+        Roles:
+          - !Ref S3forEC2
     
     LBSecGroup:
       Type: AWS::EC2::SecurityGroup
