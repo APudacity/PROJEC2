@@ -5,11 +5,8 @@ Parameters:
     EnvironmentName:
         Description: An environment name that will be prefixed to resource names
         Type: String
-    AMItype:
-        Description: The 2 vCPU machine type 
-        Type: String
-Resources:
 
+Resources:
     S3forEC2: 
       Type: "AWS::IAM::Role"
       Properties:
@@ -25,14 +22,12 @@ Resources:
         Path: / 
         ManagedPolicyArns:
         - arn:aws:iam::aws:policy/AmazonS3ReadOnlyAccess
-        
     S3forEC2InstanceProfile:
       Type: "AWS::IAM::InstanceProfile"
       Properties:
         Path: /  
         Roles:
           - !Ref S3forEC2
-    
     LBSecGroup:
       Type: AWS::EC2::SecurityGroup
       Properties:
@@ -40,7 +35,6 @@ Resources:
         VpcId:
           Fn::ImportValue:
             !Sub "${EnvironmentName}-VPCID"
-
         SecurityGroupIngress:
           - IpProtocol: tcp
             FromPort: 80
@@ -63,11 +57,7 @@ Resources:
         - IpProtocol: tcp
           FromPort: 80
           ToPort: 80
-          CidrIp: 0.0.0.0/0
-        - IpProtocol: tcp
-          FromPort: 22
-          ToPort: 22
-          CidrIp: 0.0.0.0/0
+          CidrIp: 0.0.0.0/0           
         SecurityGroupEgress:
         - IpProtocol: tcp
           FromPort: 0
@@ -84,7 +74,7 @@ Resources:
             sudo systemctl start apache2.service          
             cd /var/www/html
             echo “it works! Udagram, Udacity” > index.html 
-        ImageId: !Ref AMItype
+        ImageId: ami-05b5badc2f7ddd88d  
         KeyName: ASPProject2Key
         SecurityGroups:
         - Ref: WebServerSecGroup
@@ -105,7 +95,6 @@ Resources:
         MaxSize: '3'
         TargetGroupARNs:
           - Ref: WebAppTargetGroup  
-
     WebAppLB:
       Type: AWS::ElasticLoadBalancingV2::LoadBalancer
       Properties:
