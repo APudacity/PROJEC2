@@ -83,7 +83,6 @@ Resources:
             cd /var/www/html
             echo “it works! Udagram, Udacity” > index.html 
         ImageId: ami-09cd747c78a9add63  
-        KeyName: ASPProject2Key
         SecurityGroups:
         - Ref: WebServerSecGroup
         InstanceType: t3.medium
